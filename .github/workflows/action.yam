@@ -1,9 +1,8 @@
 name: Deploy my lambda function
 
-on:
+on: 
   push:
-    branches:
-      - main
+    branches: [ main ]
       
 jobs:
   build:
