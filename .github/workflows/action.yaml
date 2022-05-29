@@ -5,6 +5,18 @@ on:
     branches: [ main ]
       
 jobs:
+  create_test_file:
+    runs-on: ubuntu-latest
+    steps:
+      - name: create file
+        run: echo 123 > test.txt
+      - name: read file in same job
+        run: cat test.txt
+  readfile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: read from previous job
+        run: cat text.txt
   lint:
     runs-on: ubuntu-latest
     steps:
