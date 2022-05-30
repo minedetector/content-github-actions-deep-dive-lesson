@@ -1,0 +1,21 @@
+version: '3.3'
+
+volumes:
+    dbdata:
+
+services:
+  mysql:
+    platform: linux/amd64
+    image: mysql
+    container_name: mentornaut-mysql-for-phpunit
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mentornaut
+      MYSQL_USER: mentornaut
+      MYSQL_PASSWORD: secret
+    volumes:
+      - dbdata:/var/lib/mysql
+    ports:
+      - 3306:3306
