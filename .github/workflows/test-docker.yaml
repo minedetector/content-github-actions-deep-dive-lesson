@@ -1,0 +1,41 @@
+name: Build and test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build docker images
+      run: docker-compose up -d
+
+#    - name: Run composer install
+#      run: docker exec -i -u="www-data" mentornaut-php-for-phpunit composer install
+
+    - name: Generate keypair for tests
+      run: |
+        mkdir -p config/jwt
+        openssl genrsa -out config/jwt/private-test.pem -aes256 4096
+        openssl rsa -pubout -in config/jwt/private-test.pem -out config/jwt/public-test.pem
+
+    - name: test running container
+      run: docker exec -i mentornaut-mysql-for-phpunit echo $MYSQL_USER
+#    - name: Switch to PHP container
+#      run: docker exec -i -u="www-data" mentornaut-php-for-phpunit bash
+
+#    - name: Generate and migrate database
+#      run: |
+#        docker exec -i -u="www-data" mentornaut-php APP_ENV=test php bin/console doctrine:database:create
+#        docker exec -i -u="www-data" mentornaut-php APP_ENV=test php bin/console doctrine:migrations:migrate
+
+#    - name: Run tests
+#      run: docker exec -i -u="www-data" mentornaut-php-for-phpunit ./bin/phpunit tests/
