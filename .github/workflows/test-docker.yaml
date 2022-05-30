@@ -22,8 +22,8 @@ jobs:
     - name: Generate keypair for tests
       run: |
         mkdir -p config/jwt
-        openssl genrsa -out config/jwt/private-test.pem -aes256 4096
-        openssl rsa -pubout -in config/jwt/private-test.pem -out config/jwt/public-test.pem
+        openssl genrsa -out config/jwt/private-test.pem -aes256 4096 -pass pass:foobar
+        openssl rsa -pubout -in config/jwt/private-test.pem -out config/jwt/public-test.pem -pass pass:foobar
 
     - name: test running container
       run: docker exec -i mentornaut-mysql-for-phpunit echo $MYSQL_USER
