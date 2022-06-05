@@ -7,7 +7,7 @@ services:
   mysql:
     platform: linux/amd64
     image: mysql
-    container_name: mentornaut-mysql-for-phpunit
+    container_name: mentornaut-mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
@@ -19,3 +19,19 @@ services:
       - dbdata:/var/lib/mysql
     ports:
       - 3306:3306
+  php:
+    container_name: mentornaut-php
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - mysql
+    ports:
+      - 8080:80
+    volumes:
+      - .:/var/www/html:cached
+      - ./var:/var/www/html/var:delegated
+      - ./vendor:/var/www/html/vendor:delegated
+    tty: true
